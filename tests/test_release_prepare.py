@@ -72,6 +72,8 @@ class MergeReleaseTests(unittest.TestCase):
             target = self.work / name
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(ROOT / name, target)
+        # Adoption starts before numbering, even when these tests run at rN.
+        (self.work / "revision").write_text("")
         self.version = (ROOT / "version").read_text().strip()
         self.git(self.work, "add", ".")
         self.git(self.work, "commit", "-m", "Introduce automatic release")
@@ -126,9 +128,11 @@ class MergeReleaseTests(unittest.TestCase):
 
     def test_new_upstream_restarts_at_r0(self):
         self.prepare(101, self.source)
-        source = self.merge(2, {"version": b"999.0.0\n", "revision": b""})
+        next_major = release.version_key(self.version, "semver")[0][0] + 1
+        version = f"{next_major}.0.0"
+        source = self.merge(2, {"version": (version + "\n").encode(), "revision": b""})
         second = self.prepare(102, source)
-        self.assertEqual(second["release_tag"], "999.0.0")
+        self.assertEqual(second["release_tag"], version)
         self.assertEqual(self.repo.blob(second["release_sha"], "revision"), b"r0\n")
 
     def test_direct_push_without_a_merged_pr_does_not_publish(self):
