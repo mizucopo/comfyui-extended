@@ -1,0 +1,26 @@
+# GitHub Issue の使い方
+
+Issue とレビュー後の追加課題は GitHub Issues で管理します。
+
+## 作成先を決める
+
+1. ユーザーがリポジトリを指定したら、そこを使う。
+2. 指定がなければ `git remote -v` と GitHub の情報で fork 関係を確認する。`origin`、`upstream`、push 先の名前だけでは決めない。同じリポジトリの fetch URL と push URL は1件として扱う。
+3. fork でない候補が1件だけで、作業内容とも一致すればそこを使う。fork や複数候補がある場合は、元 Issue、レビュー対象 PR の base、貢献ガイドを確認する。fork の親だけでは作成先を決めない。
+4. まだ不明なら、候補と迷っている理由を示し、ユーザーにリポジトリ URL を聞く。回答まで Issue は作成しない。読み取り調査は続けてよい。
+5. 作成先で Issue を利用できることを確認し、GitHub の host・owner・repo を明示して作成する。確認できなければ別のリポジトリへ切り替えず、報告して作成先を確認する。
+
+## Issue の書き方と扱い方
+
+- 着手前に本文・コメント・ラベルをすべて読む。
+- 目的、望む結果、問題や未決事項を短く書く。完了条件は役立つ場合だけ加える。
+- 実装方法は、必須の条件でなければ指定しない。必要な根拠や参照 URL は添える。
+- ブロック関係は GitHub の Issue 依存関係で示す。使えなければ本文に書く。
+- PR は実装とレビューに使う。課題の追跡には Issue を使う。
+
+スキルの「ticket」は GitHub Issue と読み替えます。利用可能な GitHub 連携を優先し、なければ GitHub CLI を使い、確認した host・owner・repo を `--repo` で指定します。
+
+- 作成: `gh issue create --repo HOST/OWNER/REPO`
+- 参照: `gh issue view <number> --repo HOST/OWNER/REPO --comments`
+
+`HOST/OWNER/REPO` と `<number>` は実際の値に置き換えます。参照時はコメントも取得するため `--comments` を付けます。
