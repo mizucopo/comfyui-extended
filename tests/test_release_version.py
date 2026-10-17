@@ -93,9 +93,6 @@ class ReleaseVersionTests(unittest.TestCase):
     def test_revision_does_not_make_stable_upstream_a_prerelease(self):
         self.assertFalse(release.publication(self.policy, self.version, "r1")["is_prerelease"])
 
-    def test_unlabeled_pr_does_not_publish(self):
-        self.assertIsNone(release.classification({"number": 1, "labels": [], "body": "Prepare only"}))
-
 
 if __name__ == "__main__":
     unittest.main()

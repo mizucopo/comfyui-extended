@@ -731,23 +731,6 @@ def policy_at(git, commit):
     return policy
 
 
-def classification(pr):
-    labels = [
-        label["name"] for label in pr["labels"] if label["name"].startswith("release:")
-    ]
-    if not labels:
-        return None
-    require(
-        len(labels) == 1 and labels[0][8:] in LEVELS,
-        f"PR #{pr['number']} needs exactly one release:patch/minor/major label",
-    )
-    require(
-        bool(re.sub(r"<!--.*?(?:-->|$)", "", pr.get("body") or "", flags=re.S).strip()),
-        f"PR #{pr['number']} needs a classification reason in its body",
-    )
-    return labels[0][8:]
-
-
 def record_at(git, commit):
     message = git.text("show", "-s", "--format=%B", commit)
     lines = message.splitlines()
@@ -1104,7 +1087,7 @@ def preparation_input(git, gh, run_id, control_commit=None):
     pending = commits[: commits.index(boundary)] if boundary else commits
     if not pending:
         return None
-    # Stop at the newest merge on main; older PR classifications are irrelevant.
+    # Each new squash merge publishes without a label or body requirement.
     pr = None
     for commit, candidates in gh.commit_associations(pending):
         # API 2026-03-10 omits merge_commit_sha from PRs. The timeline's
@@ -1135,16 +1118,18 @@ def preparation_input(git, gh, run_id, control_commit=None):
             break
     if pr is None:
         return None
-    level = classification(pr)
-    if level is None:
-        return None
+    require(
+        policy_at(git, main)["version"]["scheme"] == "upstream-revision",
+        "Automatic merge releases require upstream-revision numbering",
+    )
     return {
         "main": main,
         "last": last,
         "baseline": last["commit"] if last else boundary or commits[-1],
         "introduction": introduction,
         "pr": pr,
-        "level": level,
+        # This scheme advances image revisions, never the upstream version.
+        "level": "patch",
     }
 
 
@@ -1189,7 +1174,7 @@ def prepare(git, gh, run_id, control_commit=None):
         )
         if base_version is None:
             # A newly introduced source has no parent value. Preserve its
-            # adoption value even when unlabeled PRs defer the first release.
+            # adoption value for the first release.
             baseline = candidate["introduction"]
             base_version = read_version(git, baseline, policy_at(git, baseline))
         base_revision = (
@@ -2026,7 +2011,6 @@ def main():
             "image-verify",
             "image-owner-verify",
             "image-owner-complete",
-            "classification",
             "distribution",
             "rust-matrix",
             "rust-build",
@@ -2037,10 +2021,6 @@ def main():
     parser.add_argument("--image-tag")
     args = parser.parse_args()
     git, gh = Git(args.root), GitHub()
-    if args.action == "classification":
-        event = json.loads(Path(os.environ["GITHUB_EVENT_PATH"]).read_text())
-        classification(gh.repo(f"/pulls/{event['number']}"))
-        return
     require(os.environ.get("GITHUB_REF") == "refs/heads/main", "Release requires main")
     if args.action in {"intent", "prepare"}:
         action = intent if args.action == "intent" else prepare

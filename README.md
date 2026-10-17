@@ -43,10 +43,10 @@ GPU での生成やモデルの互換性は実機で別途確認してくださ�
 
 ## イメージの公開
 
-Docker Hub の公開予定先は
+Docker Hub の公開先は
 [`mizucopo/comfyui-extended`](https://hub.docker.com/r/mizucopo/comfyui-extended) です。
-公開手順は [docs/release.md](docs/release.md)、変更の分類は
-[CONTRIBUTING.md](CONTRIBUTING.md) を参照してください。
+main への squash merge 後、テスト・ビルドに成功すれば自動公開されます。
+ラベルや手動実行は不要です。詳細は [docs/release.md](docs/release.md) を参照してください。
 
 `version` は上流タグの `v` を除いた値です。イメージ・Git タグ・Release 名は
 初回が `x.y.z`、同じ上流版の改訂が `x.y.z-r1` 以降になります。

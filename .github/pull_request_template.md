@@ -1,12 +1,11 @@
 <!--
 [CONTRIBUTING.md](../blob/main/CONTRIBUTING.md) を読んでから PR を作成・確認してください。
-この案内を、変更内容・検証結果・分類理由に置き換えてください。
+この案内を、変更内容と検証結果に置き換えてください。
 
 ## 変更内容
 
 ## 検証
 
-## リリース
-
-[CONTRIBUTING.md](../blob/main/CONTRIBUTING.md#リリース分類) に従い、希望する分類と理由、または公開を希望しないことを記載してください。
+main への squash merge 後、検証に成功すれば Docker Hub へ自動公開されます。
+公開用のラベルや手動 dispatch は不要です。
 -->

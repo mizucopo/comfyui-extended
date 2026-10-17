@@ -3,7 +3,6 @@ name: Docker Release
 on:
   push:
     branches: [main]
-  workflow_dispatch:
 
 permissions:
   contents: write
@@ -29,7 +28,7 @@ jobs:
       - name: Validate release branch
         run: |
           if [ "$GITHUB_REF" != 'refs/heads/main' ]; then
-            echo '::error::Release requires main. Select the main branch when running this workflow manually.'
+            echo '::error::Release requires a push to main.'
             exit 1
           fi
       - name: Checkout control code
