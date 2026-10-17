@@ -3,8 +3,8 @@
 ## ComfyUI のバージョンとイメージ改訂
 
 `version` は ComfyUI 公式タグの先頭の `v` を除いた値です。Dockerfile の
-`COMFYUI_VERSION` に同じ値を設定し、`COMFYUI_COMMIT` はそのタグの commit に固定します。
-ビルドは `refs/tags/v${COMFYUI_VERSION}` を取得し、commit の一致を検証します。
+冒頭の `ARG COMFYUI_VERSION=...` に同じ値を設定し、`COMFYUI_COMMIT` をそのタグの
+commit に揃えます。ビルドは `refs/tags/v${COMFYUI_VERSION}` を取得して SHA を照合します。
 
 新しい公式タグへ更新するときは、この3値を揃えて `revision` を空にします。
 `.github/release.json` の `upstream-revision` 方式により、新しい上流版の初回は
@@ -14,6 +14,11 @@ Git タグ・GitHub Release 名・Docker Hub タグは同じ値です。
 既存タグと衝突した場合も上流 version を変更せず、空いている revision へ進めます。
 分類ラベルは公開の選択と影響を表し、上流 version の増分には使いません。
 初回公開には設定済みの上流版をそのまま使い、`r0` から空きタグを確認します。
+
+Dockerfile の更新入力は冒頭に一度だけ値を宣言した `COMFYUI_VERSION`、
+`COMFYUI_COMMIT`、`PYTORCH_IMAGE` です。上流更新時は版と対応 SHA を同時に置換します。
+ベース更新時は `PYTORCH_IMAGE` のタグと digest を一緒に置換します。
+ベースだけを変更する場合は `version` と `revision` を保持し、公開時に次の rN を採番します。
 
 ## 設定
 

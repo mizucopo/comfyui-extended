@@ -10,7 +10,10 @@
 - `version` follows the official ComfyUI tag without its `v` prefix. Use the template's
   `upstream-revision` scheme and `revision` file for image-specific changes; never bump the
   upstream version based on release classification or tag collisions.
-- Keep Dockerfile's COMFYUI_VERSION aligned with `version` and pin COMFYUI_COMMIT to that
-  official tag. Upstream updates clear `revision`; same-version changes use automatic rN.
+- Keep the single global COMFYUI_VERSION assignment aligned with `version` and update
+  COMFYUI_COMMIT to that official tag's commit in the same change. Upstream updates clear
+  `revision`; same-version changes use automatic rN. Preserve the checkout SHA verification.
+- Keep PYTORCH_IMAGE as one complete tag-and-digest reference. Runtime-only updates preserve
+  `version` and `revision` and receive their next rN during publication.
 - Use Copier's normal three-way updates. Preserve the project-specific upstream revision
   policy, initial r0 handling and version checks when updating generated configuration.

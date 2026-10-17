@@ -1,10 +1,13 @@
-FROM pytorch/pytorch:2.14.1-cuda13.0-cudnn9-runtime@sha256:3c0b174a1339193a5bcc4b37d737c9f5ca3c4782a2293d3888e4271367eddf44
-
 ARG COMFYUI_VERSION=0.41.3
 ARG COMFYUI_COMMIT=8713616fcc321624e306bbd36be5906203dcb0dc
+ARG PYTORCH_IMAGE=pytorch/pytorch:2.14.1-cuda13.0-cudnn9-runtime@sha256:3c0b174a1339193a5bcc4b37d737c9f5ca3c4782a2293d3888e4271367eddf44
+
+FROM ${PYTORCH_IMAGE}
+ARG COMFYUI_VERSION
+ARG COMFYUI_COMMIT
 
 LABEL org.opencontainers.image.title="comfyui-extended" \
-    org.opencontainers.image.description="ComfyUI with the PyTorch CUDA 13.0 runtime" \
+    org.opencontainers.image.description="ComfyUI with the PyTorch CUDA runtime" \
     org.opencontainers.image.source="https://github.com/mizucopo/comfyui-extended"
 
 RUN apt-get update \
