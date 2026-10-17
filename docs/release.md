@@ -1,5 +1,20 @@
 # 採番・公開
 
+## ComfyUI のバージョンとイメージ改訂
+
+`version` は ComfyUI 公式タグの先頭の `v` を除いた値です。Dockerfile の
+`COMFYUI_VERSION` に同じ値を設定し、`COMFYUI_COMMIT` はそのタグの commit に固定します。
+ビルドは `refs/tags/v${COMFYUI_VERSION}` を取得し、commit の一致を検証します。
+
+新しい公式タグへ更新するときは、この3値を揃えて `revision` を空にします。
+`.github/release.json` の `upstream-revision` 方式により、新しい上流版の初回は
+`<version>`、同じ版の改訂は `<version>-r1` 以降になります（`-r0` は省略）。
+Git タグ・GitHub Release 名・Docker Hub タグは同じ値です。
+同じ上流版の変更では version/revision を手動で増やす必要はありません。
+既存タグと衝突した場合も上流 version を変更せず、空いている revision へ進めます。
+分類ラベルは公開の選択と影響を表し、上流 version の増分には使いません。
+初回公開には設定済みの上流版をそのまま使い、`r0` から空きタグを確認します。
+
 ## 設定
 
 - squash merge を使う。分類基準、公開の選択と投稿者・メンテナーの手順は [CONTRIBUTING.md](../CONTRIBUTING.md#リリース分類) に従う。通常のテスト・lint は公開の選択にかかわらず実行する。

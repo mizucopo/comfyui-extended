@@ -211,6 +211,7 @@ def choose(
     base_revision=None,
     input_version=None,
     explicit_revision=None,
+    initial=False,
 ):
     scheme = policy["version"]["scheme"]
     if scheme == "upstream-revision":
@@ -220,7 +221,7 @@ def choose(
         require(precedence >= base_precedence, "Upstream version would decrease")
         floor = (
             revision_number(base_revision or "r0") + 1
-            if precedence == base_precedence
+            if precedence == base_precedence and not initial
             else 0
         )
         if explicit_revision is not None:
@@ -1206,8 +1207,11 @@ def prepare(git, gh, run_id, control_commit=None):
             base_revision=base_revision,
             input_version=version,
             explicit_revision=revision
-            if revision_path and revision != base_revision
+            if revision_path and (revision != base_revision or not last)
             else None,
+            # A new repository's adoption value is already its first upstream
+            # version. Reserve r0 first; collision checks still advance rN.
+            initial=last is None,
         )
         tree = update_versions(git, main, policy, version, revision)
         message = (

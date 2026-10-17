@@ -37,7 +37,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Number latest main and reserve its tag
+      - name: Reserve the upstream version and image revision
         id: prepare
         env:
           GH_TOKEN: ${{ github.token }}
@@ -77,6 +77,8 @@ jobs:
           printf 'RELEASE_PLAN_OUTPUT=%s\n' "$RELEASE_PLAN_OUTPUT" >> "$GITHUB_ENV"
           python3 -I .github/scripts/release.py plan
 
+      - name: Validate upstream version and image revisions
+        run: python3 -B -m unittest discover -s tests -v
 
       - name: Inspect versioned image
         id: image-state

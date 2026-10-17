@@ -11,7 +11,7 @@ docker_smoke_command: ''
 dockerfile_path: Dockerfile
 project_description: ComfyUI の CUDA 対応 Docker イメージ
 project_name: comfyui-extended
-project_version: 0.1.0
+project_version: 0.41.3
 use_aws_ecr: false
 use_chrome_extension: false
 use_dependabot_docker: true

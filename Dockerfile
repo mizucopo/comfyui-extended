@@ -1,6 +1,7 @@
 FROM pytorch/pytorch:2.14.1-cuda13.0-cudnn9-runtime@sha256:3c0b174a1339193a5bcc4b37d737c9f5ca3c4782a2293d3888e4271367eddf44
 
-ARG COMFYUI_REVISION=98cc0bf84b7cb1383654c5b402e7612d875d6d22
+ARG COMFYUI_VERSION=0.41.3
+ARG COMFYUI_COMMIT=8713616fcc321624e306bbd36be5906203dcb0dc
 
 LABEL org.opencontainers.image.title="comfyui-extended" \
     org.opencontainers.image.description="ComfyUI with the PyTorch CUDA 13.0 runtime" \
@@ -13,9 +14,9 @@ RUN apt-get update \
 RUN git init /opt/ComfyUI \
     && cd /opt/ComfyUI \
     && git remote add origin https://github.com/Comfy-Org/ComfyUI.git \
-    && git fetch --depth 1 origin "$COMFYUI_REVISION" \
+    && git fetch --depth 1 origin "refs/tags/v${COMFYUI_VERSION}" \
     && git checkout --detach FETCH_HEAD \
-    && test "$(git rev-parse HEAD)" = "$COMFYUI_REVISION"
+    && test "$(git rev-parse HEAD)" = "$COMFYUI_COMMIT"
 
 # Keep the base image's matching torch/torchvision/torchaudio CUDA wheels.
 RUN python -m venv --system-site-packages /opt/venv

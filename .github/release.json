@@ -1,6 +1,7 @@
 {
   "version": {
-    "scheme": "semver",
+    "scheme": "upstream-revision",
+    "revision_path": "revision",
     "sources": [
       {
         "path": "version",
@@ -11,16 +12,16 @@
     ]
   },
   "publication": {
-    "release_tag": "{version}",
+    "release_tag": "{version}{revision_suffix}",
     "github_release": true,
 
-    "release_paths": ["version", "Dockerfile"],
+    "release_paths": ["version", "revision", "Dockerfile", ".github/release.json"],
     "latest_image": "extended",
     "images": [
       {
         "name": "extended",
         "repository": "mizucopo/comfyui-extended",
-        "tag": "{version}",
+        "tag": "{version}{revision_suffix}",
         "aliases": ["latest"],
         "registry": "dockerhub"
       }

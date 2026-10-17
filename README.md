@@ -8,7 +8,7 @@ ComfyUI の CUDA 対応 Docker イメージです。モデルの重みは含み�
 - ビルドには大きな CUDA ベースと Python 依存のダウンロードが必要です。
 - Apple Silicon でのネイティブ GPU 実行には対応しません。
 
-ComfyUI `v0.41.0`（`98cc0bf84b7cb1383654c5b402e7612d875d6d22`）と
+ComfyUI 公式タグ [`v0.41.3`](https://github.com/Comfy-Org/ComfyUI/tree/v0.41.3) と
 `pytorch/pytorch:2.14.1-cuda13.0-cudnn9-runtime` を使用します。
 ベースイメージの digest は Dockerfile で固定しています。
 
@@ -47,3 +47,7 @@ Docker Hub の公開予定先は
 [`mizucopo/comfyui-extended`](https://hub.docker.com/r/mizucopo/comfyui-extended) です。
 公開手順は [docs/release.md](docs/release.md)、変更の分類は
 [CONTRIBUTING.md](CONTRIBUTING.md) を参照してください。
+
+`version` は上流タグの `v` を除いた値です。イメージ・Git タグ・Release 名は
+初回が `0.41.3`、同じ上流版の改訂が `0.41.3-r1` 以降になります。
+上流版の更新時は `revision` を空にし、同じ版の改訂番号は公開時に自動採番します。
