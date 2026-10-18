@@ -13,7 +13,13 @@ jobs:
       DOCKERFILE_PATH: "Dockerfile"
       DOCKER_BUILD_CONTEXT: "."
       LOCAL_IMAGE: repo-template-smoke:${{ github.sha }}
-      DOCKER_SMOKE_COMMAND: ""
+      DOCKER_SMOKE_COMMAND: >-
+        python -c 'import sys; sys.argv += ["--cpu", "--disable-all-custom-nodes", "--whitelist-custom-nodes", "ComfyUI-GGUF", "--disable-partner-nodes"];
+        import comfy.options; comfy.options.enable_args_parsing();
+        import asyncio, nodes; asyncio.run(nodes.init_external_custom_nodes());
+        assert "UnetLoaderGGUF" in nodes.NODE_CLASS_MAPPINGS;
+        assert nodes.NODE_CLASS_MAPPINGS["CheckpointLoaderSimple"] is nodes.CheckpointLoaderSimple;
+        assert "qwen_image" in nodes.CLIPLoader.INPUT_TYPES()["required"]["type"][0]'
     steps:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
