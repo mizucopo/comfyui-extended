@@ -55,7 +55,8 @@ GPU での生成やモデルの互換性は実機で別途確認してくださ�
 
 ワークフローの `UNETLoader` を `Unet Loader (GGUF)` に置き換えます。
 `custom_nodes` 全体をマウントすると同梱ノードが隠れるため、通常はマウント不要です。
-起動引数を指定すると既定の `CMD` が置き換わるため、GGUF を使う場合は
+起動引数を指定すると既定の `CMD` が置き換わるため、
+公開用の `--listen 0.0.0.0 --port 8188` と、GGUF 用の
 `--disable-all-custom-nodes --whitelist-custom-nodes ComfyUI-GGUF --disable-partner-nodes`
 も指定してください。モデル本体の読み込み・GPU 推論は未検証です。
 
