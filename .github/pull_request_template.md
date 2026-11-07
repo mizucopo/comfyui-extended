@@ -7,5 +7,6 @@
 ## 検証
 
 main への squash merge 後、検証に成功すれば Docker Hub へ自動公開されます。
-公開用のラベルや手動 dispatch は不要です。
+公開用のラベルや手動 dispatch、分類理由は不要です。
+文書のみ・テストのみの PR でも現在の main 全体を公開します。
 -->
