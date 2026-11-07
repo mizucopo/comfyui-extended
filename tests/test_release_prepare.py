@@ -126,6 +126,19 @@ class MergeReleaseTests(unittest.TestCase):
         self.assertEqual(second["release_tag"], self.version + "-r1")
         self.assertEqual(second["version"], self.version)
 
+    def test_docs_only_merge_publishes_without_classification(self):
+        self.prepare(101, self.source)
+        source = self.merge(2, {"README.md": b"Documentation-only update\n"})
+        # Irrelevant or invalid classification labels must not gate this scheme.
+        self.gh.prs[2]["labels"] = [
+            {"name": "release:none"}, {"name": "release:major"}
+        ]
+        second = self.prepare(102, source)
+        self.assertEqual(second["release_tag"], self.version + "-r1")
+        self.assertEqual(second["version"], self.version)
+        self.assertEqual(self.repo.blob(second["release_sha"], "README.md"),
+                         b"Documentation-only update\n")
+
     def test_new_upstream_restarts_at_r0(self):
         self.prepare(101, self.source)
         next_major = release.version_key(self.version, "semver")[0][0] + 1

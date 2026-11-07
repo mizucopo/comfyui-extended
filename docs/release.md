@@ -5,6 +5,8 @@
 PR ではテスト・Docker build checks・Linux amd64 のビルドを行い、公開しません。
 main への squash merge 後は `Docker Release` が自動で実行されます。
 公開用ラベル、手動 dispatch、事前の GitHub Release 作成は不要です。
+文書のみ・テストのみも含め、新しい squash-merged PR があれば現在の main 全体を
+公開します。`publication.release_paths` の差分や分類ラベルでは公開を抑止しません。
 
 1. 最新 main の squash merge を確認し、版とイメージ改訂を採番する。
 2. 採番 commit と Git タグを atomic push する。

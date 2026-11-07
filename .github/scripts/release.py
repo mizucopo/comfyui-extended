@@ -1087,7 +1087,8 @@ def preparation_input(git, gh, run_id, control_commit=None):
     pending = commits[: commits.index(boundary)] if boundary else commits
     if not pending:
         return None
-    # Each new squash merge publishes without a label or body requirement.
+    # Each new squash merge publishes, including docs-only changes, without
+    # consulting release paths, classification labels or a classification reason.
     pr = None
     for commit, candidates in gh.commit_associations(pending):
         # API 2026-03-10 omits merge_commit_sha from PRs. The timeline's
