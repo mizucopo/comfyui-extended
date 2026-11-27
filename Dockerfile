@@ -45,5 +45,4 @@ RUN python -c 'import importlib.metadata as m; print("\n".join(n+"=="+m.version(
 
 WORKDIR /opt/ComfyUI
 EXPOSE 8188
-ENTRYPOINT ["python", "main.py"]
-CMD ["--listen", "0.0.0.0", "--port", "8188", "--disable-all-custom-nodes", "--whitelist-custom-nodes", "ComfyUI-GGUF", "--disable-partner-nodes"]
+ENTRYPOINT ["python", "main.py", "--listen", "0.0.0.0", "--port", "8188", "--disable-all-custom-nodes", "--whitelist-custom-nodes", "ComfyUI-GGUF", "--disable-partner-nodes"]
