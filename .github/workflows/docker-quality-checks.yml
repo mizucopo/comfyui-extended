@@ -38,6 +38,8 @@ jobs:
           load: true
           push: false
           tags: ${{ env.LOCAL_IMAGE }}
+      - name: Verify ComfyUI startup arguments
+        run: sh tests/check-docker-startup.sh "$LOCAL_IMAGE"
       - name: Run Docker smoke test
         if: ${{ env.DOCKER_SMOKE_COMMAND != '' }}
         run: docker run --rm --entrypoint sh "$LOCAL_IMAGE" -eu -c "$DOCKER_SMOKE_COMMAND"

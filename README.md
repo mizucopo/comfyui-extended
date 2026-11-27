@@ -23,6 +23,26 @@ docker run --rm --gpus all -p 127.0.0.1:8188:8188 comfyui-extended:local
 [ComfyUI-GGUF（leejet fork）](https://github.com/leejet/ComfyUI-GGUF) だけを許可し、
 partner nodes は無効です。モデルや出力を保持するには、必要なデータをマウントしてください。
 
+### 起動引数の追加と上書き
+
+イメージ名の後に指定した引数は、既定の引数に続けて ComfyUI に渡されます。
+`--lowvram` を追加する場合も、待受設定と同梱ノードの許可設定が適用されます。
+
+```sh
+docker run --rm --gpus all -p 127.0.0.1:8188:8188 comfyui-extended:local --lowvram
+```
+
+`--listen`、`--port`、`--whitelist-custom-nodes` は後に指定した値が優先されます。
+許可リストを指定し直す場合は、有効にしたいノードをすべて列挙してください。
+起動引数を一式指定するには、イメージ名の前に `--entrypoint python`、
+イメージ名の後に `main.py` と必要な引数を指定します。
+ComfyUI には `main.py` の後の引数だけが渡されます。
+
+```sh
+docker run --rm --gpus all -p 127.0.0.1:8190:8190 --entrypoint python \
+  comfyui-extended:local main.py --listen 0.0.0.0 --port 8190 --disable-all-custom-nodes --disable-partner-nodes
+```
+
 GPU やモデルを使わず CLI を確認する場合は、次を実行します。
 
 ```sh
@@ -55,10 +75,7 @@ GPU での生成やモデルの互換性は実機で別途確認してくださ�
 
 ワークフローの `UNETLoader` を `Unet Loader (GGUF)` に置き換えます。
 `custom_nodes` 全体をマウントすると同梱ノードが隠れるため、通常はマウント不要です。
-起動引数を指定すると既定の `CMD` が置き換わるため、
-公開用の `--listen 0.0.0.0 --port 8188` と、GGUF 用の
-`--disable-all-custom-nodes --whitelist-custom-nodes ComfyUI-GGUF --disable-partner-nodes`
-も指定してください。モデル本体の読み込み・GPU 推論は未検証です。
+モデル本体の読み込み・GPU 推論は未検証です。
 
 従来の SD 1.5 は `v1-5-pruned-emaonly.safetensors` を `models/checkpoints/` に配置し、
 別の SD 1.5 ワークフローで標準 `CheckpointLoaderSimple` を使用できます。
